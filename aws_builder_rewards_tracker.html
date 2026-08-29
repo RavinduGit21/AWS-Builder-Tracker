@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AWS Builder Rewards Tracker</title>
+<style>
+  :root {
+    --bg: #0f1720;
+    --panel: #151f2b;
+    --panel2: #1b2735;
+    --text: #e8eef5;
+    --muted: #9eacbb;
+    --accent: #ff9900;
+    --accent2: #a970ff;
+    --green: #3ddc97;
+    --red: #ff6b6b;
+    --border: #2a3949;
+    --shadow: 0 12px 30px rgba(0,0,0,.22);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    background: linear-gradient(135deg, #0c131b, var(--bg));
+    color: var(--text);
+  }
+
+  .container {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  h1, h2, h3 { margin: 0; }
+  h1 { font-size: 28px; }
+  .subtitle { color: var(--muted); margin-top: 6px; }
+
+  .top-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  button, input, select {
+    font: inherit;
+  }
+
+  button {
+    background: var(--panel2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 9px 13px;
+    cursor: pointer;
+  }
+  button:hover { border-color: #49617a; }
+  .primary {
+    background: var(--accent);
+    color: #111;
+    border-color: var(--accent);
+    font-weight: 700;
+  }
+  .danger {
+    border-color: rgba(255,107,107,.4);
+    color: #ffc0c0;
+  }
+
+  .grid {
+    display: grid;
+    gap: 14px;
+  }
+  .stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .two { grid-template-columns: 1.3fr .7fr; }
+  .three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+  .card {
+    background: rgba(21,31,43,.96);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+    box-shadow: var(--shadow);
+  }
+
+  .stat-value {
+    font-size: 28px;
+    font-weight: 800;
+    margin-top: 8px;
+  }
+  .stat-label { color: var(--muted); font-size: 13px; }
+
+  .progress {
+    height: 9px;
+    background: #263343;
+    border-radius: 999px;
+    overflow: hidden;
+    margin-top: 10px;
+  }
+  .progress > div {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    transition: width .2s ease;
+  }
+
+  .section-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .today-row {
+    display: grid;
+    grid-template-columns: 1fr repeat(5, auto);
+    align-items: center;
+    gap: 10px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+  }
+  .today-row:last-child { border-bottom: 0; }
+
+  .task-name { font-weight: 700; }
+  .task-meta { color: var(--muted); font-size: 12px; margin-top: 3px; }
+
+  .check {
+    width: 22px;
+    height: 22px;
+    accent-color: var(--green);
+    cursor: pointer;
+  }
+
+  .calendar-head {
+    display: grid;
+    grid-template-columns: 130px repeat(5, minmax(80px,1fr));
+    gap: 8px;
+    margin-bottom: 8px;
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .calendar-row {
+    display: grid;
+    grid-template-columns: 130px repeat(5, minmax(80px,1fr));
+    gap: 8px;
+    align-items: center;
+    padding: 6px 0;
+  }
+
+  .day-date {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .day-label { font-weight: 700; }
+
+  .cell {
+    background: #121c27;
+    border: 1px solid #263546;
+    border-radius: 8px;
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cell.done {
+    background: rgba(61,220,151,.12);
+    border-color: rgba(61,220,151,.4);
+  }
+
+  .cell.future {
+    opacity: .45;
+  }
+
+  .badge-list {
+    display: grid;
+    gap: 10px;
+  }
+
+  .badge {
+    background: #121c27;
+    border: 1px solid #263546;
+    border-radius: 10px;
+    padding: 12px;
+  }
+
+  .badge-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .badge-name { font-weight: 800; }
+  .badge-req { color: var(--muted); font-size: 12px; margin-top: 4px; }
+
+  .badge-controls {
+    display: flex;
+    gap: 7px;
+    align-items: center;
+  }
+
+  .num-input {
+    width: 70px;
+    background: #0f1720;
+    color: var(--text);
+    border: 1px solid #314356;
+    border-radius: 8px;
+    padding: 7px 8px;
+  }
+
+  .small { font-size: 12px; color: var(--muted); }
+
+  .completed {
+    border-color: rgba(61,220,151,.5);
+    background: rgba(61,220,151,.07);
+  }
+
+  .manual {
+    color: #ffd08a;
+  }
+
+  .note {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  textarea {
+    width: 100%;
+    min-height: 92px;
+    resize: vertical;
+    background: #0f1720;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 10px;
+  }
+
+  .footer {
+    color: var(--muted);
+    text-align: center;
+    font-size: 12px;
+    padding: 20px 0 6px;
+  }
+
+  @media (max-width: 900px) {
+    .stats { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .two, .three { grid-template-columns: 1fr; }
+    .today-row { grid-template-columns: 1fr repeat(5, auto); }
+    .calendar-head, .calendar-row {
+      grid-template-columns: 105px repeat(5, minmax(64px,1fr));
+    }
+  }
+
+  @media (max-width: 620px) {
+    .container { padding: 14px; }
+    header { align-items: flex-start; flex-direction: column; }
+    .stats { grid-template-columns: 1fr 1fr; }
+    .today-row { grid-template-columns: 1fr repeat(3, auto); }
+    .today-row .hide-mobile { display: none; }
+    .calendar-wrap { overflow-x: auto; }
+    .calendar-head, .calendar-row { min-width: 640px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div>
+      <h1>☁️ AWS Builder Rewards Tracker</h1>
+      <div class="subtitle">Daily tracker starting from today — data is saved in your browser.</div>
+    </div>
+    <div class="top-actions">
+      <button class="primary" id="todayBtn">Go to Today</button>
+      <button id="exportBtn">Export Data</button>
+      <button class="danger" id="resetBtn">Reset All</button>
+    </div>
+  </header>
+
+  <div class="grid stats">
+    <div class="card">
+      <div class="stat-label">Current Streak</div>
+      <div class="stat-value" id="streakValue">0 days</div>
+      <div class="small">Visit + Like + Comment all completed.</div>
+    </div>
+    <div class="card">
+      <div class="stat-label">Badges Completed</div>
+      <div class="stat-value" id="badgesValue">0 / 21</div>
+      <div class="progress"><div id="badgeProgress"></div></div>
+    </div>
+    <div class="card">
+      <div class="stat-label">Next Reward</div>
+      <div class="stat-value" id="rewardValue">$10</div>
+      <div class="small" id="rewardSub">Reach 7 badges</div>
+    </div>
+    <div class="card">
+      <div class="stat-label">90-Day Goal</div>
+      <div class="stat-value" id="dayProgress">Day 1 / 90</div>
+      <div class="progress"><div id="dayProgressBar"></div></div>
+    </div>
+  </div>
+
+  <div class="grid two" style="margin-top:14px;">
+    <section class="card">
+      <div class="section-title">
+        <h2>Today</h2>
+        <strong id="todayDate"></strong>
+      </div>
+      <div id="todayTasks"></div>
+    </section>
+
+    <section class="card">
+      <div class="section-title">
+        <h2>Quick Notes</h2>
+      </div>
+      <textarea id="notes" placeholder="Write a quick note for today..."></textarea>
+      <div class="note" style="margin-top:8px;">Examples: article published, comment link, Wish voted, someone replied, badge unlocked.</div>
+    </section>
+  </div>
+
+  <section class="card" style="margin-top:14px;">
+    <div class="section-title">
+      <div>
+        <h2>90-Day Daily Tracker</h2>
+        <div class="note">Tick these every day. Missing a day breaks the 7/30/90-day visit, like and comment streaks.</div>
+      </div>
+    </div>
+    <div class="calendar-wrap">
+      <div class="calendar-head">
+        <div>Date</div><div>Visit</div><div>Like</div><div>Comment</div><div>Wish Vote</div><div>Article</div>
+      </div>
+      <div id="calendar"></div>
+    </div>
+  </section>
+
+  <div class="grid two" style="margin-top:14px;">
+    <section class="card">
+      <div class="section-title">
+        <h2>Badge Progress</h2>
+        <span class="small">Update counters when you make progress.</span>
+      </div>
+      <div id="badges" class="badge-list"></div>
+    </section>
+
+    <section class="card">
+      <div class="section-title">
+        <h2>Milestones</h2>
+      </div>
+      <div class="badge-list">
+        <div class="badge">
+          <div class="badge-name">🎯 7 Badges</div>
+          <div class="badge-req">First AWS credits milestone</div>
+        </div>
+        <div class="badge">
+          <div class="badge-name">🎁 14 Badges</div>
+          <div class="badge-req">Second credits milestone</div>
+        </div>
+        <div class="badge">
+          <div class="badge-name">🏆 21 Badges</div>
+          <div class="badge-req">Certification voucher milestone</div>
+        </div>
+        <div class="badge">
+          <div class="badge-name">💡 Tip</div>
+          <div class="badge-req">For Conversation Starter, Meaningful Contributor and Valued Creator, record the numbers you see on your Builder Center badge page.</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="footer">Runs entirely in your browser using localStorage. No account or server required.</div>
+</div>
+
+<script>
+(() => {
+  const KEY = "awsBuilderRewardsTracker_v1";
+  const startDate = new Date();
+  startDate.setHours(0,0,0,0);
+
+  const badgeDefs = [
+    { id:"b1", name:"Knowledge Seeker", req:"Complete the Builder Center activity that awards this badge", type:"manual" },
+    { id:"b2", name:"Hello, World!", req:"Complete your Builder Center profile/onboarding", type:"manual" },
+    { id:"b3", name:"Photo Finisher", req:"Add a profile photo", type:"manual" },
+    { id:"b4", name:"Discussion Debut", req:"Create your first discussion/post", type:"manual" },
+    { id:"b5", name:"First Wish", req:"Create your first Wish", type:"manual" },
+    { id:"b6", name:"First Article", req:"Publish your first article", type:"manual" },
+    { id:"b7", name:"7-Day Visit Streak", req:"Visit Builder Center for 7 consecutive days", target:7, source:"visit" },
+    { id:"b8", name:"7-Day Like Streak", req:"Like content for 7 consecutive days", target:7, source:"like" },
+    { id:"b9", name:"7-Day Comment Streak", req:"Comment for 7 consecutive days", target:7, source:"comment" },
+    { id:"b10", name:"4-Week Wish Vote Streak", req:"Vote on Wishes for 4 consecutive weeks", target:4, source:"wishWeeks" },
+    { id:"b11", name:"4-Week Article Publishing Streak", req:"Publish an article weekly for 4 consecutive weeks", target:4, source:"articleWeeks" },
+    { id:"b12", name:"30-Day Visit Streak", req:"Visit Builder Center for 30 consecutive days", target:30, source:"visit" },
+    { id:"b13", name:"30-Day Like Streak", req:"Like content for 30 consecutive days", target:30, source:"like" },
+    { id:"b14", name:"30-Day Comment Streak", req:"Comment for 30 consecutive days", target:30, source:"comment" },
+    { id:"b15", name:"Conversation Starter", req:"Get a reply on 10 of your comments", target:10, source:"replies" },
+    { id:"b16", name:"Meaningful Contributor", req:"Get 10 likes on each of 5 comments", target:5, source:"meaningfulComments" },
+    { id:"b17", name:"Valued Creator", req:"Get 10 likes on each of 5 articles", target:5, source:"valuedArticles" },
+    { id:"b18", name:"Idea Influencer", req:"Get 10 votes on your Wishes", target:10, source:"wishVotesReceived" },
+    { id:"b19", name:"90-Day Visit Streak", req:"Visit Builder Center for 90 consecutive days", target:90, source:"visit" },
+    { id:"b20", name:"90-Day Like Streak", req:"Like content for 90 consecutive days", target:90, source:"like" },
+    { id:"b21", name:"90-Day Comment Streak", req:"Comment for 90 consecutive days", target:90, source:"comment" }
+  ];
+
+  const defaultState = {
+    days: {},
+    manual: {},
+    counters: {
+      wishWeeks: 0,
+      articleWeeks: 1,
+      replies: 0,
+      meaningfulComments: 0,
+      valuedArticles: 0,
+      wishVotesReceived: 2
+    },
+    notes: {}
+  };
+
+  let state = load();
+
+  function load() {
+    try {
+      const raw = localStorage.getItem(KEY);
+      if (!raw) return structuredClone(defaultState);
+      const parsed = JSON.parse(raw);
+      return {
+        days: parsed.days || {},
+        manual: parsed.manual || {},
+        counters: {...defaultState.counters, ...(parsed.counters || {})},
+        notes: parsed.notes || {}
+      };
+    } catch {
+      return structuredClone(defaultState);
+    }
+  }
+
+  function save() {
+    localStorage.setItem(KEY, JSON.stringify(state));
+  }
+
+  function keyForDate(d) {
+    return d.toISOString().slice(0,10);
+  }
+
+  function formatDate(d) {
+    return d.toLocaleDateString(undefined, {year:"numeric", month:"short", day:"numeric"});
+  }
+
+  function formatShort(d) {
+    return d.toLocaleDateString(undefined, {month:"short", day:"numeric"});
+  }
+
+  function sameDay(a,b) {
+    return a.toDateString() === b.toDateString();
+  }
+
+  function dayData(k) {
+    if (!state.days[k]) {
+      state.days[k] = {visit:false, like:false, comment:false, wish:false, article:false};
+    }
+    return state.days[k];
+  }
+
+  function dateAtOffset(n) {
+    const d = new Date(startDate);
+    d.setDate(startDate.getDate() + n);
+    return d;
+  }
+
+  function streak(source) {
+    let n = 0;
+    for (let i = 0; i < 90; i++) {
+      const d = dateAtOffset(i);
+      const k = keyForDate(d);
+      const row = state.days[k];
+      if (!row || !row[source]) break;
+      n++;
+    }
+    return n;
+  }
+
+  function allCoreDoneToday() {
+    const row = dayData(keyForDate(startDate));
+    return row.visit && row.like && row.comment;
+  }
+
+  function totalBadges() {
+    let count = 0;
+    badgeDefs.forEach(b => {
+      if (badgeDone(b)) count++;
+    });
+    return count;
+  }
+
+  function badgeValue(b) {
+    if (b.type === "manual") return state.manual[b.id] ? 1 : 0;
+    if (b.source === "visit" || b.source === "like" || b.source === "comment") return streak(b.source);
+    if (b.source === "wishWeeks") return state.counters.wishWeeks;
+    if (b.source === "articleWeeks") return state.counters.articleWeeks;
+    return state.counters[b.source] || 0;
+  }
+
+  function badgeDone(b) {
+    return b.type === "manual" ? !!state.manual[b.id] : badgeValue(b) >= b.target;
+  }
+
+  function rewardInfo(count) {
+    if (count >= 21) return {value:"$100 voucher", sub:"21 badges reached"};
+    if (count >= 14) return {value:"$100 voucher", sub:"14 badges reached • 21 is next"};
+    if (count >= 7) return {value:"$20 credits", sub:"7 badges reached • 14 is next"};
+    return {value:"$10 credits", sub:`Reach ${7-count} more badge${7-count===1?"":"s"}`};
+  }
+
+  function renderStats() {
+    const count = totalBadges();
+    const reward = rewardInfo(count);
+    document.getElementById("streakValue").textContent =
+      `${Math.min(streak("visit"), streak("like"), streak("comment"))} days`;
+
+    document.getElementById("badgesValue").textContent = `${count} / 21`;
+    document.getElementById("badgeProgress").style.width = `${(count/21)*100}%`;
+
+    document.getElementById("rewardValue").textContent = reward.value;
+    document.getElementById("rewardSub").textContent = reward.sub;
+
+    const elapsed = Math.min(90, Math.floor((Date.now()-startDate.getTime())/86400000)+1);
+    document.getElementById("dayProgress").textContent = `Day ${elapsed} / 90`;
+    document.getElementById("dayProgressBar").style.width = `${(elapsed/90)*100}%`;
+
+    document.getElementById("todayDate").textContent = formatDate(startDate);
+  }
+
+  const tasks = [
+    ["visit", "Visit Builder Center", "Needed for 7 / 30 / 90-day visit streaks"],
+    ["like", "Like useful content", "Needed for 7 / 30 / 90-day like streaks"],
+    ["comment", "Leave a meaningful comment", "Needed for 7 / 30 / 90-day comment streaks"],
+    ["wish", "Vote on a Wish", "Supports your Wish activity / 4-week goal"],
+    ["article", "Publish / work on weekly article", "Track your weekly publishing goal"]
+  ];
+
+  function renderToday() {
+    const wrap = document.getElementById("todayTasks");
+    wrap.innerHTML = "";
+    const k = keyForDate(startDate);
+    const row = dayData(k);
+
+    tasks.forEach(([field, name, meta]) => {
+      const div = document.createElement("div");
+      div.className = "today-row";
+      div.innerHTML = `
+        <div>
+          <div class="task-name">${name}</div>
+          <div class="task-meta">${meta}</div>
+        </div>
+        <input class="check" type="checkbox" ${row[field] ? "checked":""} data-today-field="${field}">
+      `;
+      wrap.appendChild(div);
+    });
+
+    wrap.querySelectorAll("[data-today-field]").forEach(cb => {
+      cb.addEventListener("change", e => {
+        state.days[k][e.target.dataset.todayField] = e.target.checked;
+        save();
+        renderAll();
+      });
+    });
+  }
+
+  function renderCalendar() {
+    const wrap = document.getElementById("calendar");
+    wrap.innerHTML = "";
+
+    for (let i=0; i<90; i++) {
+      const d = dateAtOffset(i);
+      const k = keyForDate(d);
+      const row = state.days[k] || {};
+      const future = d > startDate;
+
+      const r = document.createElement("div");
+      r.className = "calendar-row";
+      r.innerHTML = `
+        <div>
+          <div class="day-label">Day ${i+1}</div>
+          <div class="day-date">${formatShort(d)}</div>
+        </div>
+        ${["visit","like","comment","wish","article"].map(f =>
+          `<div class="cell ${row[f] ? "done":""} ${future ? "future":""}">
+             <input class="check" type="checkbox" data-date="${k}" data-field="${f}" ${row[f] ? "checked":""} ${future ? "disabled":""}>
+           </div>`
+        ).join("")}
+      `;
+      wrap.appendChild(r);
+    }
+
+    wrap.querySelectorAll("input[data-date]").forEach(cb => {
+      cb.addEventListener("change", e => {
+        const k = e.target.dataset.date;
+        dayData(k)[e.target.dataset.field] = e.target.checked;
+        save();
+        renderAll();
+      });
+    });
+  }
+
+  function renderBadges() {
+    const wrap = document.getElementById("badges");
+    wrap.innerHTML = "";
+
+    badgeDefs.forEach(b => {
+      const val = badgeValue(b);
+      const done = badgeDone(b);
+      const div = document.createElement("div");
+      div.className = "badge" + (done ? " completed" : "");
+      const controls = b.type === "manual"
+        ? `<label class="small"><input type="checkbox" class="check" data-manual="${b.id}" ${state.manual[b.id] ? "checked":""}> Done</label>`
+        : `<div class="badge-controls">
+             <input class="num-input" type="number" min="0" value="${val}" data-counter="${b.id}">
+             <span class="small">/ ${b.target}</span>
+           </div>`;
+
+      div.innerHTML = `
+        <div class="badge-top">
+          <div>
+            <div class="badge-name">${done ? "✅ " : ""}${b.name}</div>
+            <div class="badge-req">${b.req}</div>
+          </div>
+          ${controls}
+        </div>
+        ${b.type !== "manual" ? `<div class="progress"><div style="width:${Math.min(100,(val/b.target)*100)}%"></div></div>` : `<div class="small manual" style="margin-top:8px;">Manual badge — tick this when Builder Center shows it as earned.</div>`}
+      `;
+      wrap.appendChild(div);
+    });
+
+    wrap.querySelectorAll("[data-manual]").forEach(cb => {
+      cb.addEventListener("change", e => {
+        state.manual[e.target.dataset.manual] = e.target.checked;
+        save();
+        renderAll();
+      });
+    });
+
+    wrap.querySelectorAll("[data-counter]").forEach(inp => {
+      inp.addEventListener("change", e => {
+        const id = e.target.dataset.counter;
+        const b = badgeDefs.find(x => x.id === id);
+        const value = Math.max(0, Number(e.target.value || 0));
+        state.counters[b.source] = value;
+        save();
+        renderAll();
+      });
+    });
+  }
+
+  function renderNotes() {
+    const k = keyForDate(keyForDate(startDate));
+    document.getElementById("notes").value = state.notes[k] || "";
+  }
+
+  function renderAll() {
+    renderStats();
+    renderToday();
+    renderCalendar();
+    renderBadges();
+    renderNotes();
+  }
+
+  document.getElementById("notes").addEventListener("input", e => {
+    state.notes[keyForDate(startDate)] = e.target.value;
+    save();
+  });
+
+  document.getElementById("todayBtn").addEventListener("click", () => {
+    window.scrollTo({top:0, behavior:"smooth"});
+  });
+
+  document.getElementById("exportBtn").addEventListener("click", () => {
+    const blob = new Blob([JSON.stringify(state, null, 2)], {type:"application/json"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `aws-builder-tracker-${keyForDate(startDate)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  document.getElementById("resetBtn").addEventListener("click", () => {
+    const ok = confirm("Reset all tracker data? This cannot be undone.");
+    if (!ok) return;
+    state = structuredClone(defaultState);
+    save();
+    renderAll();
+  });
+
+  renderAll();
+})();
+</script>
+</body>
+</html>
