@@ -4,112 +4,243 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>AWS Builder Rewards Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0f1720;
-    --panel: #151f2b;
-    --panel2: #1b2735;
-    --text: #e8eef5;
-    --muted: #9eacbb;
-    --accent: #ff9900;
-    --accent2: #a970ff;
-    --green: #3ddc97;
-    --red: #ff6b6b;
-    --border: #2a3949;
-    --shadow: 0 12px 30px rgba(0,0,0,.22);
+    --bg: #070a0f;
+    --bg-card: rgba(15, 23, 36, 0.85);
+    --bg-card-hover: rgba(22, 33, 50, 0.95);
+    --bg-table-row: rgba(13, 20, 31, 0.6);
+    --bg-table-row-alt: rgba(18, 27, 42, 0.6);
+    --border: rgba(255, 255, 255, 0.08);
+    --border-highlight: rgba(255, 153, 0, 0.3);
+    
+    --text-main: #f1f5f9;
+    --text-muted: #94a3b8;
+    --text-dim: #64748b;
+    
+    --aws-orange: #ff9900;
+    --aws-orange-glow: rgba(255, 153, 0, 0.2);
+    --accent-purple: #a855f7;
+    --accent-blue: #3b82f6;
+    --green-success: #10b981;
+    --green-glow: rgba(16, 185, 129, 0.15);
+    --red-danger: #ef4444;
+    
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --shadow-main: 0 16px 36px -8px rgba(0, 0, 0, 0.5);
+    --shadow-glow: 0 0 25px rgba(255, 153, 0, 0.12);
   }
 
   * { box-sizing: border-box; }
+  
   body {
     margin: 0;
-    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    background: linear-gradient(135deg, #0c131b, var(--bg));
-    color: var(--text);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: var(--bg);
+    background-image: 
+      radial-gradient(circle at 15% 15%, rgba(255, 153, 0, 0.05) 0%, transparent 40%),
+      radial-gradient(circle at 85% 85%, rgba(168, 85, 247, 0.05) 0%, transparent 40%);
+    background-attachment: fixed;
+    color: var(--text-main);
+    line-height: 1.5;
+    min-height: 100vh;
+    padding-bottom: 40px;
   }
 
   .container {
-    max-width: 1180px;
+    max-width: 1240px;
     margin: 0 auto;
     padding: 24px;
   }
 
+  /* Header */
   header {
     display: flex;
     justify-content: space-between;
-    gap: 16px;
     align-items: center;
-    margin-bottom: 20px;
+    gap: 20px;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
   }
 
-  h1, h2, h3 { margin: 0; }
-  h1 { font-size: 28px; }
-  .subtitle { color: var(--muted); margin-top: 6px; }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .brand-logo {
+    width: 46px;
+    height: 46px;
+    background: linear-gradient(135deg, var(--aws-orange), #ff6600);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    box-shadow: 0 6px 16px rgba(255, 153, 0, 0.3);
+  }
+
+  h1 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    margin: 0;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #ffffff 40%, #cbd5e1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-top: 3px;
+  }
 
   .top-actions {
     display: flex;
+    gap: 10px;
     flex-wrap: wrap;
+  }
+
+  /* Buttons */
+  button, label.btn-label {
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
     gap: 8px;
-  }
-
-  button, input, select {
-    font: inherit;
-  }
-
-  button {
-    background: var(--panel2);
-    color: var(--text);
+    padding: 10px 16px;
+    border-radius: var(--radius-sm);
     border: 1px solid var(--border);
-    border-radius: 9px;
-    padding: 9px 13px;
+    background: rgba(30, 41, 59, 0.6);
+    color: var(--text-main);
     cursor: pointer;
-  }
-  button:hover { border-color: #49617a; }
-  .primary {
-    background: var(--accent);
-    color: #111;
-    border-color: var(--accent);
-    font-weight: 700;
-  }
-  .danger {
-    border-color: rgba(255,107,107,.4);
-    color: #ffc0c0;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(8px);
   }
 
+  button:hover, label.btn-label:hover {
+    background: rgba(47, 63, 86, 0.8);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+  }
+
+  button.primary {
+    background: linear-gradient(135deg, var(--aws-orange), #e68a00);
+    color: #000;
+    border: none;
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(255, 153, 0, 0.3);
+  }
+
+  button.primary:hover {
+    background: linear-gradient(135deg, #ffa826, #ff9900);
+    box-shadow: 0 6px 20px rgba(255, 153, 0, 0.45);
+  }
+
+  button.danger {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #fca5a5;
+  }
+
+  button.danger:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.5);
+  }
+
+  /* Cards Grid */
   .grid {
     display: grid;
-    gap: 14px;
+    gap: 16px;
   }
-  .stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .two { grid-template-columns: 1.3fr .7fr; }
-  .three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+  .stats-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .two-col {
+    grid-template-columns: 1.2fr 0.8fr;
+  }
 
   .card {
-    background: rgba(21,31,43,.96);
+    background: var(--bg-card);
     border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 16px;
-    box-shadow: var(--shadow);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    box-shadow: var(--shadow-main);
+    backdrop-filter: blur(12px);
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .card:hover {
+    border-color: rgba(255, 255, 255, 0.14);
+  }
+
+  /* Stat Card Details */
+  .stat-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .stat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .stat-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .stat-icon {
+    font-size: 18px;
+    opacity: 0.8;
   }
 
   .stat-value {
-    font-size: 28px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 30px;
     font-weight: 800;
-    margin-top: 8px;
+    margin: 10px 0 4px;
+    color: #fff;
   }
-  .stat-label { color: var(--muted); font-size: 13px; }
 
-  .progress {
-    height: 9px;
-    background: #263343;
+  .stat-desc {
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  /* Progress Bar */
+  .progress-bar-bg {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.08);
     border-radius: 999px;
     overflow: hidden;
     margin-top: 10px;
   }
-  .progress > div {
+
+  .progress-bar-fill {
     height: 100%;
     width: 0%;
-    background: linear-gradient(90deg, var(--accent2), var(--accent));
-    transition: width .2s ease;
+    background: linear-gradient(90deg, var(--accent-purple), var(--aws-orange));
+    border-radius: 999px;
+    transition: width 0.4s ease;
   }
 
   .section-title {
@@ -117,269 +248,536 @@
     justify-content: space-between;
     align-items: center;
     gap: 12px;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   }
 
-  .today-row {
-    display: grid;
-    grid-template-columns: 1fr repeat(5, auto);
+  .section-title h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0;
+    display: flex;
     align-items: center;
     gap: 10px;
-    padding: 12px 0;
-    border-bottom: 1px solid rgba(255,255,255,.06);
   }
-  .today-row:last-child { border-bottom: 0; }
 
-  .task-name { font-weight: 700; }
-  .task-meta { color: var(--muted); font-size: 12px; margin-top: 3px; }
-
-  .check {
-    width: 22px;
-    height: 22px;
-    accent-color: var(--green);
+  /* Custom Checkbox */
+  .custom-checkbox {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    accent-color: var(--green-success);
     cursor: pointer;
   }
 
-  .calendar-head {
-    display: grid;
-    grid-template-columns: 130px repeat(5, minmax(80px,1fr));
+  /* Daily Tasks Practical List (Image 3 Inspired) */
+  .practical-list-section {
+    margin-top: 24px;
+  }
+
+  .task-group-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin: 16px 0 10px;
+    display: flex;
+    align-items: center;
     gap: 8px;
+    color: #fff;
+  }
+
+  .habit-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-sm);
     margin-bottom: 8px;
-    color: var(--muted);
+    transition: background 0.2s ease;
+  }
+
+  .habit-row:hover {
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .habit-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .habit-name {
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .habit-sub {
     font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .one-time-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .one-time-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-sm);
+  }
+
+  .one-time-card.done {
+    background: var(--green-glow);
+    border-color: rgba(16, 185, 129, 0.3);
+  }
+
+  /* 21 Badges Table (Image 1 & 2 Inspired) */
+  .badge-table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 10px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+  }
+
+  .badge-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 13.5px;
+  }
+
+  .badge-table th {
+    background: rgba(10, 16, 26, 0.95);
+    color: var(--text-muted);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.8px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .badge-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    vertical-align: middle;
+  }
+
+  .badge-table tr:nth-child(even) {
+    background: var(--bg-table-row-alt);
+  }
+  .badge-table tr:nth-child(odd) {
+    background: var(--bg-table-row);
+  }
+
+  .badge-table tr:hover {
+    background: rgba(255, 153, 0, 0.04);
+  }
+
+  .badge-num {
+    font-weight: 800;
+    color: var(--text-dim);
+    width: 40px;
+  }
+
+  .badge-title-cell {
+    font-weight: 700;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+  }
+
+  .badge-desc-cell {
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+
+  .badge-action-cell {
+    text-align: right;
+    min-width: 130px;
+  }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .status-badge.completed {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--green-success);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+
+  .status-badge.pending {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-muted);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .counter-input {
+    width: 68px;
+    background: #090e17;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    padding: 5px 8px;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .counter-input:focus {
+    outline: none;
+    border-color: var(--aws-orange);
+  }
+
+  /* Rewards Milestones Cards */
+  .rewards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 12px;
+  }
+
+  .reward-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.25 ease;
+  }
+
+  .reward-card.active {
+    background: rgba(255, 153, 0, 0.06);
+    border-color: var(--aws-orange);
+    box-shadow: 0 0 20px rgba(255, 153, 0, 0.15);
+  }
+
+  .reward-badge-req {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+
+  .reward-card.active .reward-badge-req {
+    background: var(--aws-orange);
+    color: #000;
+  }
+
+  .reward-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+
+  .reward-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  /* 90-Day Calendar Grid */
+  .calendar-wrap {
+    overflow-x: auto;
+    margin-top: 10px;
+  }
+
+  .calendar-head, .calendar-row {
+    display: grid;
+    grid-template-columns: 140px repeat(5, minmax(80px, 1fr));
+    gap: 8px;
+    align-items: center;
+  }
+
+  .calendar-head {
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 8px;
   }
 
   .calendar-row {
-    display: grid;
-    grid-template-columns: 130px repeat(5, minmax(80px,1fr));
-    gap: 8px;
-    align-items: center;
-    padding: 6px 0;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  }
+
+  .calendar-row.is-today {
+    background: rgba(255, 153, 0, 0.08);
+    border-radius: var(--radius-sm);
+    padding: 8px 6px;
+  }
+
+  .day-label {
+    font-weight: 700;
+    font-size: 13px;
+    color: #fff;
   }
 
   .day-date {
-    font-size: 12px;
-    color: var(--muted);
+    font-size: 11px;
+    color: var(--text-dim);
   }
 
-  .day-label { font-weight: 700; }
-
   .cell {
-    background: #121c27;
-    border: 1px solid #263546;
+    background: rgba(15, 23, 36, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 8px;
-    min-height: 42px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: all 0.2s ease;
   }
 
   .cell.done {
-    background: rgba(61,220,151,.12);
-    border-color: rgba(61,220,151,.4);
+    background: rgba(16, 185, 129, 0.15);
+    border-color: rgba(16, 185, 129, 0.4);
   }
 
   .cell.future {
-    opacity: .45;
+    opacity: 0.35;
   }
 
-  .badge-list {
-    display: grid;
-    gap: 10px;
-  }
-
-  .badge {
-    background: #121c27;
-    border: 1px solid #263546;
-    border-radius: 10px;
-    padding: 12px;
-  }
-
-  .badge-top {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    align-items: flex-start;
-  }
-
-  .badge-name { font-weight: 800; }
-  .badge-req { color: var(--muted); font-size: 12px; margin-top: 4px; }
-
-  .badge-controls {
-    display: flex;
-    gap: 7px;
-    align-items: center;
-  }
-
-  .num-input {
-    width: 70px;
-    background: #0f1720;
-    color: var(--text);
-    border: 1px solid #314356;
-    border-radius: 8px;
-    padding: 7px 8px;
-  }
-
-  .small { font-size: 12px; color: var(--muted); }
-
-  .completed {
-    border-color: rgba(61,220,151,.5);
-    background: rgba(61,220,151,.07);
-  }
-
-  .manual {
-    color: #ffd08a;
-  }
-
-  .note {
-    color: var(--muted);
-    font-size: 12px;
-    line-height: 1.5;
-  }
-
-  textarea {
+  textarea#notes {
     width: 100%;
-    min-height: 92px;
-    resize: vertical;
-    background: #0f1720;
-    color: var(--text);
+    min-height: 110px;
+    background: #090e17;
+    color: var(--text-main);
     border: 1px solid var(--border);
-    border-radius: 9px;
-    padding: 10px;
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    font-family: inherit;
+    font-size: 13.5px;
+    resize: vertical;
   }
 
-  .footer {
-    color: var(--muted);
+  textarea#notes:focus {
+    outline: none;
+    border-color: var(--aws-orange);
+  }
+
+  footer {
     text-align: center;
+    color: var(--text-dim);
     font-size: 12px;
-    padding: 20px 0 6px;
+    margin-top: 36px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
   }
 
-  @media (max-width: 900px) {
-    .stats { grid-template-columns: repeat(2, minmax(0,1fr)); }
-    .two, .three { grid-template-columns: 1fr; }
-    .today-row { grid-template-columns: 1fr repeat(5, auto); }
-    .calendar-head, .calendar-row {
-      grid-template-columns: 105px repeat(5, minmax(64px,1fr));
-    }
+  /* Responsive Design */
+  @media (max-width: 960px) {
+    .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .two-col { grid-template-columns: 1fr; }
+    .rewards-grid { grid-template-columns: 1fr; }
+    .one-time-grid { grid-template-columns: 1fr; }
   }
 
-  @media (max-width: 620px) {
-    .container { padding: 14px; }
-    header { align-items: flex-start; flex-direction: column; }
-    .stats { grid-template-columns: 1fr 1fr; }
-    .today-row { grid-template-columns: 1fr repeat(3, auto); }
-    .today-row .hide-mobile { display: none; }
-    .calendar-wrap { overflow-x: auto; }
-    .calendar-head, .calendar-row { min-width: 640px; }
+  @media (max-width: 640px) {
+    .container { padding: 16px; }
+    header { flex-direction: column; align-items: flex-start; }
+    .stats-grid { grid-template-columns: 1fr; }
+    .top-actions { width: 100%; }
+    .top-actions button { flex: 1; }
   }
 </style>
 </head>
 <body>
 <div class="container">
+  <!-- Header -->
   <header>
-    <div>
-      <h1>☁️ AWS Builder Rewards Tracker</h1>
-      <div class="subtitle">Daily tracker starting from today — data is saved in your browser.</div>
+    <div class="brand">
+      <div class="brand-logo">☁️</div>
+      <div>
+        <h1>AWS Builder Rewards Tracker</h1>
+        <div class="subtitle">Log daily habits, reach 90-day streaks & unlock all 21 AWS badges</div>
+      </div>
     </div>
     <div class="top-actions">
-      <button class="primary" id="todayBtn">Go to Today</button>
-      <button id="exportBtn">Export Data</button>
-      <button class="danger" id="resetBtn">Reset All</button>
+      <button class="primary" id="todayBtn">🎯 Go to Today</button>
+      <button id="exportBtn">📥 Export Data</button>
+      <label class="btn-label" style="margin:0;">
+        📤 Import JSON
+        <input type="file" id="importInput" accept=".json" style="display:none;">
+      </label>
+      <button class="danger" id="resetBtn">⚠️ Reset</button>
     </div>
   </header>
 
-  <div class="grid stats">
-    <div class="card">
-      <div class="stat-label">Current Streak</div>
+  <!-- Top Hero Stats -->
+  <div class="grid stats-grid">
+    <div class="card stat-card">
+      <div class="stat-header">
+        <span class="stat-label">Current Streak</span>
+        <span class="stat-icon">🔥</span>
+      </div>
       <div class="stat-value" id="streakValue">0 days</div>
-      <div class="small">Visit + Like + Comment all completed.</div>
+      <div class="stat-desc">Visit + Like + Comment completed</div>
     </div>
-    <div class="card">
-      <div class="stat-label">Badges Completed</div>
+
+    <div class="card stat-card">
+      <div class="stat-header">
+        <span class="stat-label">Badges Unlocked</span>
+        <span class="stat-icon">🏆</span>
+      </div>
       <div class="stat-value" id="badgesValue">0 / 21</div>
-      <div class="progress"><div id="badgeProgress"></div></div>
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="badgeProgress"></div></div>
     </div>
-    <div class="card">
-      <div class="stat-label">Next Reward</div>
-      <div class="stat-value" id="rewardValue">$10</div>
-      <div class="small" id="rewardSub">Reach 7 badges</div>
+
+    <div class="card stat-card">
+      <div class="stat-header">
+        <span class="stat-label">Current Reward Tier</span>
+        <span class="stat-icon">🎁</span>
+      </div>
+      <div class="stat-value" id="rewardValue">$0</div>
+      <div class="stat-desc" id="rewardSub">Reach 7 badges for $10 AWS credits</div>
     </div>
-    <div class="card">
-      <div class="stat-label">90-Day Goal</div>
+
+    <div class="card stat-card">
+      <div class="stat-header">
+        <span class="stat-label">90-Day Challenge</span>
+        <span class="stat-icon">📅</span>
+      </div>
       <div class="stat-value" id="dayProgress">Day 1 / 90</div>
-      <div class="progress"><div id="dayProgressBar"></div></div>
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="dayProgressBar"></div></div>
     </div>
   </div>
 
-  <div class="grid two" style="margin-top:14px;">
+  <!-- Today's Habits & Practical Task List (Image 3 Inspired) -->
+  <div class="grid two-col practical-list-section">
     <section class="card">
       <div class="section-title">
-        <h2>Today</h2>
-        <strong id="todayDate"></strong>
+        <h2>📊 Your Practical Task List</h2>
+        <span style="font-size:12px; color:var(--text-muted);" id="todayDate"></span>
       </div>
-      <div id="todayTasks"></div>
+      <p style="font-size:13px; color:var(--text-muted); margin-top:-6px;">Keep this list open beside you every day for consistent progress.</p>
+      
+      <!-- One Time Tasks -->
+      <div class="task-group-title">✅ One-Time Tasks (Complete Once)</div>
+      <div class="one-time-grid" id="oneTimeList">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <!-- Everyday Core Habits -->
+      <div class="task-group-title" style="margin-top:20px;">🔥 Everyday Core Habits</div>
+      <div id="todayTasks">
+        <!-- Today tasks checkboxes rendered dynamically -->
+      </div>
+      <p style="font-size:12px; color:var(--text-dim); margin-top:8px;">
+        💡 <i>These 3 daily habits feed all 7-Day, 30-Day, and 90-Day streak badges automatically.</i>
+      </p>
     </section>
 
-    <section class="card">
-      <div class="section-title">
-        <h2>Quick Notes</h2>
+    <section class="card" style="display:flex; flex-direction:column; justify-content:space-between;">
+      <div>
+        <div class="section-title">
+          <h2>📝 Quick Notes & Logs</h2>
+        </div>
+        <textarea id="notes" placeholder="Paste article links, comment links, Wish vote references, or general progress notes for today..."></textarea>
       </div>
-      <textarea id="notes" placeholder="Write a quick note for today..."></textarea>
-      <div class="note" style="margin-top:8px;">Examples: article published, comment link, Wish voted, someone replied, badge unlocked.</div>
+
+      <!-- Reward Milestones Overview (Image 2 Inspired) -->
+      <div style="margin-top:20px;">
+        <div class="section-title" style="margin-bottom:10px; padding-bottom:8px;">
+          <h2 style="font-size:16px;">🎁 Reward Milestones</h2>
+        </div>
+        <div class="rewards-grid">
+          <div class="reward-card" id="rewardTier1">
+            <span class="reward-badge-req">7 Badges</span>
+            <div class="reward-title">$10</div>
+            <div class="reward-sub">AWS Credits</div>
+          </div>
+          <div class="reward-card" id="rewardTier2">
+            <span class="reward-badge-req">14 Badges</span>
+            <div class="reward-title">+$20</div>
+            <div class="reward-sub">$30 Total Credits</div>
+          </div>
+          <div class="reward-card" id="rewardTier3">
+            <span class="reward-badge-req">21 Badges</span>
+            <div class="reward-title">$100</div>
+            <div class="reward-sub">Cert Voucher</div>
+          </div>
+        </div>
+      </div>
     </section>
   </div>
 
-  <section class="card" style="margin-top:14px;">
+  <!-- 21 AWS Badges Full Matrix Table (Image 1 & 2 Inspired) -->
+  <section class="card" style="margin-top:20px;">
     <div class="section-title">
-      <div>
-        <h2>90-Day Daily Tracker</h2>
-        <div class="note">Tick these every day. Missing a day breaks the 7/30/90-day visit, like and comment streaks.</div>
-      </div>
+      <h2>🏆 All 21 AWS Student Rewards Badges</h2>
+      <span style="font-size:12px; color:var(--text-muted);">Track completion & goal counters</span>
+    </div>
+    
+    <div class="badge-table-container">
+      <table class="badge-table">
+        <thead>
+          <tr>
+            <th style="width: 40px;">#</th>
+            <th>Badge Name</th>
+            <th>What You Need To Do</th>
+            <th style="text-align: right;">Progress / Action</th>
+          </tr>
+        </thead>
+        <tbody id="badgeTableBody">
+          <!-- Rendered dynamically -->
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 90-Day Daily Tracker Calendar -->
+  <section class="card" style="margin-top:20px;">
+    <div class="section-title">
+      <h2>📅 90-Day Daily Tracker Matrix</h2>
+      <span style="font-size:12px; color:var(--text-muted);">Tick tasks daily to build consecutive streaks</span>
     </div>
     <div class="calendar-wrap">
       <div class="calendar-head">
-        <div>Date</div><div>Visit</div><div>Like</div><div>Comment</div><div>Wish Vote</div><div>Article</div>
+        <div>Day & Date</div>
+        <div>Visit</div>
+        <div>Like</div>
+        <div>Comment</div>
+        <div>Wish Vote</div>
+        <div>Article</div>
       </div>
       <div id="calendar"></div>
     </div>
   </section>
 
-  <div class="grid two" style="margin-top:14px;">
-    <section class="card">
-      <div class="section-title">
-        <h2>Badge Progress</h2>
-        <span class="small">Update counters when you make progress.</span>
-      </div>
-      <div id="badges" class="badge-list"></div>
-    </section>
-
-    <section class="card">
-      <div class="section-title">
-        <h2>Milestones</h2>
-      </div>
-      <div class="badge-list">
-        <div class="badge">
-          <div class="badge-name">🎯 7 Badges</div>
-          <div class="badge-req">First AWS credits milestone</div>
-        </div>
-        <div class="badge">
-          <div class="badge-name">🎁 14 Badges</div>
-          <div class="badge-req">Second credits milestone</div>
-        </div>
-        <div class="badge">
-          <div class="badge-name">🏆 21 Badges</div>
-          <div class="badge-req">Certification voucher milestone</div>
-        </div>
-        <div class="badge">
-          <div class="badge-name">💡 Tip</div>
-          <div class="badge-req">For Conversation Starter, Meaningful Contributor and Valued Creator, record the numbers you see on your Builder Center badge page.</div>
-        </div>
-      </div>
-    </section>
-  </div>
-
-  <div class="footer">Runs entirely in your browser using localStorage. No account or server required.</div>
+  <footer>
+    Runs entirely in your web browser using local storage. Zero data leaves your computer.
+  </footer>
 </div>
 
 <script>
@@ -389,27 +787,27 @@
   startDate.setHours(0,0,0,0);
 
   const badgeDefs = [
-    { id:"b1", name:"Knowledge Seeker", req:"Complete the Builder Center activity that awards this badge", type:"manual" },
-    { id:"b2", name:"Hello, World!", req:"Complete your Builder Center profile/onboarding", type:"manual" },
-    { id:"b3", name:"Photo Finisher", req:"Add a profile photo", type:"manual" },
-    { id:"b4", name:"Discussion Debut", req:"Create your first discussion/post", type:"manual" },
-    { id:"b5", name:"First Wish", req:"Create your first Wish", type:"manual" },
-    { id:"b6", name:"First Article", req:"Publish your first article", type:"manual" },
-    { id:"b7", name:"7-Day Visit Streak", req:"Visit Builder Center for 7 consecutive days", target:7, source:"visit" },
-    { id:"b8", name:"7-Day Like Streak", req:"Like content for 7 consecutive days", target:7, source:"like" },
-    { id:"b9", name:"7-Day Comment Streak", req:"Comment for 7 consecutive days", target:7, source:"comment" },
-    { id:"b10", name:"4-Week Wish Vote Streak", req:"Vote on Wishes for 4 consecutive weeks", target:4, source:"wishWeeks" },
-    { id:"b11", name:"4-Week Article Publishing Streak", req:"Publish an article weekly for 4 consecutive weeks", target:4, source:"articleWeeks" },
-    { id:"b12", name:"30-Day Visit Streak", req:"Visit Builder Center for 30 consecutive days", target:30, source:"visit" },
-    { id:"b13", name:"30-Day Like Streak", req:"Like content for 30 consecutive days", target:30, source:"like" },
-    { id:"b14", name:"30-Day Comment Streak", req:"Comment for 30 consecutive days", target:30, source:"comment" },
-    { id:"b15", name:"Conversation Starter", req:"Get a reply on 10 of your comments", target:10, source:"replies" },
-    { id:"b16", name:"Meaningful Contributor", req:"Get 10 likes on each of 5 comments", target:5, source:"meaningfulComments" },
-    { id:"b17", name:"Valued Creator", req:"Get 10 likes on each of 5 articles", target:5, source:"valuedArticles" },
-    { id:"b18", name:"Idea Influencer", req:"Get 10 votes on your Wishes", target:10, source:"wishVotesReceived" },
-    { id:"b19", name:"90-Day Visit Streak", req:"Visit Builder Center for 90 consecutive days", target:90, source:"visit" },
-    { id:"b20", name:"90-Day Like Streak", req:"Like content for 90 consecutive days", target:90, source:"like" },
-    { id:"b21", name:"90-Day Comment Streak", req:"Comment for 90 consecutive days", target:90, source:"comment" }
+    { id:"b1", name:"Knowledge Seeker", icon:"🧠", req:"Complete the required learning/exploration activity on Builder Center.", type:"manual" },
+    { id:"b2", name:"Hello, World!", icon:"🌐", req:"Complete your Builder Center profile/onboarding.", type:"manual" },
+    { id:"b3", name:"Photo Finisher", icon:"📸", req:"Add a profile photo to your Builder Center profile.", type:"manual" },
+    { id:"b4", name:"Discussion Debut", icon:"💬", req:"Make your first discussion/post on Builder Center.", type:"manual" },
+    { id:"b5", name:"First Wish", icon:"💡", req:"Create your first Wish in the AWS Builder Center Wishlist.", type:"manual" },
+    { id:"b6", name:"First Article", icon:"📝", req:"Publish your first Builder Center article.", type:"manual" },
+    { id:"b7", name:"7-Day Visit Streak", icon:"💻", req:"Visit Builder Center for 7 consecutive days.", target:7, source:"visit" },
+    { id:"b8", name:"7-Day Like Streak", icon:"💖", req:"Like content for 7 consecutive days.", target:7, source:"like" },
+    { id:"b9", name:"7-Day Comment Streak", icon:"💬", req:"Comment for 7 consecutive days.", target:7, source:"comment" },
+    { id:"b10", name:"4-Week Wish Vote Streak", icon:"📋", req:"Vote on Wishes once each week for 4 consecutive weeks.", target:4, source:"wishWeeks" },
+    { id:"b11", name:"4-Week Article Publishing Streak", icon:"✍️", req:"Publish 1 article every week for 4 consecutive weeks.", target:4, source:"articleWeeks" },
+    { id:"b12", name:"30-Day Visit Streak", icon:"💻", req:"Visit Builder Center for 30 consecutive days.", target:30, source:"visit" },
+    { id:"b13", name:"30-Day Like Streak", icon:"💖", req:"Like content for 30 consecutive days.", target:30, source:"like" },
+    { id:"b14", name:"30-Day Comment Streak", icon:"💬", req:"Comment for 30 consecutive days.", target:30, source:"comment" },
+    { id:"b15", name:"Conversation Starter", icon:"🗣️", req:"Get a reply on 10 of your comments.", target:10, source:"replies" },
+    { id:"b16", name:"Meaningful Contributor", icon:"⭐", req:"Get 10 likes on each of 5 different comments.", target:5, source:"meaningfulComments" },
+    { id:"b17", name:"Valued Creator", icon:"🏆", req:"Get 10 likes on each of 5 different articles.", target:5, source:"valuedArticles" },
+    { id:"b18", name:"Idea Influencer", icon:"💡", req:"Get 10 votes on your Wishes.", target:10, source:"wishVotesReceived" },
+    { id:"b19", name:"90-Day Visit Streak", icon:"💻", req:"Visit Builder Center for 90 consecutive days.", target:90, source:"visit" },
+    { id:"b20", name:"90-Day Like Streak", icon:"💖", req:"Like content for 90 consecutive days.", target:90, source:"like" },
+    { id:"b21", name:"90-Day Comment Streak", icon:"💬", req:"Comment for 90 consecutive days.", target:90, source:"comment" }
   ];
 
   const defaultState = {
@@ -417,11 +815,11 @@
     manual: {},
     counters: {
       wishWeeks: 0,
-      articleWeeks: 1,
+      articleWeeks: 0,
       replies: 0,
       meaningfulComments: 0,
       valuedArticles: 0,
-      wishVotesReceived: 2
+      wishVotesReceived: 0
     },
     notes: {}
   };
@@ -460,10 +858,6 @@
     return d.toLocaleDateString(undefined, {month:"short", day:"numeric"});
   }
 
-  function sameDay(a,b) {
-    return a.toDateString() === b.toDateString();
-  }
-
   function dayData(k) {
     if (!state.days[k]) {
       state.days[k] = {visit:false, like:false, comment:false, wish:false, article:false};
@@ -489,11 +883,6 @@
     return n;
   }
 
-  function allCoreDoneToday() {
-    const row = dayData(keyForDate(startDate));
-    return row.visit && row.like && row.comment;
-  }
-
   function totalBadges() {
     let count = 0;
     badgeDefs.forEach(b => {
@@ -515,15 +904,16 @@
   }
 
   function rewardInfo(count) {
-    if (count >= 21) return {value:"$100 voucher", sub:"21 badges reached"};
-    if (count >= 14) return {value:"$100 voucher", sub:"14 badges reached • 21 is next"};
-    if (count >= 7) return {value:"$20 credits", sub:"7 badges reached • 14 is next"};
-    return {value:"$10 credits", sub:`Reach ${7-count} more badge${7-count===1?"":"s"}`};
+    if (count >= 21) return {value:"$100 Cert Voucher", sub:"All 21 Badges Unlocked! 🎉", tier:3};
+    if (count >= 14) return {value:"$30 Credits", sub:"14 Badges ($10 + $20 AWS Credits)", tier:2};
+    if (count >= 7) return {value:"$10 Credits", sub:"7 Badges reached", tier:1};
+    return {value:"$0 Credits", sub:`Reach ${7-count} more badge${7-count===1?"":"s"} for $10`, tier:0};
   }
 
   function renderStats() {
     const count = totalBadges();
     const reward = rewardInfo(count);
+
     document.getElementById("streakValue").textContent =
       `${Math.min(streak("visit"), streak("like"), streak("comment"))} days`;
 
@@ -538,15 +928,46 @@
     document.getElementById("dayProgressBar").style.width = `${(elapsed/90)*100}%`;
 
     document.getElementById("todayDate").textContent = formatDate(startDate);
+
+    // Update reward cards highlight
+    document.getElementById("rewardTier1").classList.toggle("active", count >= 7 && count < 14);
+    document.getElementById("rewardTier2").classList.toggle("active", count >= 14 && count < 21);
+    document.getElementById("rewardTier3").classList.toggle("active", count >= 21);
   }
 
   const tasks = [
-    ["visit", "Visit Builder Center", "Needed for 7 / 30 / 90-day visit streaks"],
-    ["like", "Like useful content", "Needed for 7 / 30 / 90-day like streaks"],
-    ["comment", "Leave a meaningful comment", "Needed for 7 / 30 / 90-day comment streaks"],
-    ["wish", "Vote on a Wish", "Supports your Wish activity / 4-week goal"],
-    ["article", "Publish / work on weekly article", "Track your weekly publishing goal"]
+    ["visit", "Visit Builder Center", "Feeds 7 / 30 / 90-day Visit Streaks"],
+    ["like", "Like useful content", "Feeds 7 / 30 / 90-day Like Streaks"],
+    ["comment", "Leave a meaningful comment", "Feeds 7 / 30 / 90-day Comment Streaks"]
   ];
+
+  function renderOneTimeTasks() {
+    const wrap = document.getElementById("oneTimeList");
+    wrap.innerHTML = "";
+    const oneTimeBadges = badgeDefs.filter(b => b.type === "manual");
+
+    oneTimeBadges.forEach(b => {
+      const isDone = !!state.manual[b.id];
+      const div = document.createElement("div");
+      div.className = `one-time-card ${isDone ? 'done' : ''}`;
+      div.innerHTML = `
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span>${b.icon}</span>
+          <span style="font-weight:600; font-size:13px; ${isDone ? 'text-decoration:line-through; color:var(--text-muted);' : 'color:#fff'}">${b.name}</span>
+        </div>
+        <input class="custom-checkbox" type="checkbox" data-one-time-id="${b.id}" ${isDone ? 'checked' : ''}>
+      `;
+      wrap.appendChild(div);
+    });
+
+    wrap.querySelectorAll("[data-one-time-id]").forEach(cb => {
+      cb.addEventListener("change", e => {
+        state.manual[e.target.dataset.oneTimeId] = e.target.checked;
+        save();
+        renderAll();
+      });
+    });
+  }
 
   function renderToday() {
     const wrap = document.getElementById("todayTasks");
@@ -556,13 +977,16 @@
 
     tasks.forEach(([field, name, meta]) => {
       const div = document.createElement("div");
-      div.className = "today-row";
+      div.className = "habit-row";
       div.innerHTML = `
-        <div>
-          <div class="task-name">${name}</div>
-          <div class="task-meta">${meta}</div>
+        <div class="habit-info">
+          <input class="custom-checkbox" type="checkbox" ${row[field] ? "checked":""} data-today-field="${field}">
+          <div>
+            <div class="habit-name">${name}</div>
+            <div class="habit-sub">${meta}</div>
+          </div>
         </div>
-        <input class="check" type="checkbox" ${row[field] ? "checked":""} data-today-field="${field}">
+        ${row[field] ? '<span class="status-badge completed">Done</span>' : '<span class="status-badge pending">Pending</span>'}
       `;
       wrap.appendChild(div);
     });
@@ -576,26 +1000,93 @@
     });
   }
 
+  function renderBadgeTable() {
+    const tbody = document.getElementById("badgeTableBody");
+    tbody.innerHTML = "";
+
+    badgeDefs.forEach((b, index) => {
+      const val = badgeValue(b);
+      const done = badgeDone(b);
+      const tr = document.createElement("tr");
+
+      let actionHtml = "";
+      if (b.type === "manual") {
+        actionHtml = `
+          <label style="display:inline-flex; align-items:center; gap:6px; cursor:pointer;">
+            <input type="checkbox" class="custom-checkbox" data-table-manual="${b.id}" ${state.manual[b.id] ? "checked":""}>
+            <span class="status-badge ${done ? 'completed' : 'pending'}">${done ? 'Unlocked ✅' : 'Locked'}</span>
+          </label>
+        `;
+      } else if (b.source === "visit" || b.source === "like" || b.source === "comment") {
+        actionHtml = `
+          <span style="font-weight:700; font-size:13px; margin-right:8px;">${val} / ${b.target} days</span>
+          <span class="status-badge ${done ? 'completed' : 'pending'}">${done ? 'Unlocked ✅' : 'In Progress'}</span>
+        `;
+      } else {
+        actionHtml = `
+          <div style="display:flex; align-items:center; justify-content:flex-end; gap:8px;">
+            <input class="counter-input" type="number" min="0" value="${val}" data-table-counter="${b.id}">
+            <span style="font-size:12px; color:var(--text-muted);">/ ${b.target}</span>
+            <span class="status-badge ${done ? 'completed' : 'pending'}">${done ? 'Unlocked ✅' : 'In Progress'}</span>
+          </div>
+        `;
+      }
+
+      tr.innerHTML = `
+        <td class="badge-num">${index + 1}</td>
+        <td>
+          <div class="badge-title-cell">
+            <span style="font-size:18px;">${b.icon}</span>
+            <span>${b.name}</span>
+          </div>
+        </td>
+        <td class="badge-desc-cell">${b.req}</td>
+        <td class="badge-action-cell">${actionHtml}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    tbody.querySelectorAll("[data-table-manual]").forEach(cb => {
+      cb.addEventListener("change", e => {
+        state.manual[e.target.dataset.tableManual] = e.target.checked;
+        save();
+        renderAll();
+      });
+    });
+
+    tbody.querySelectorAll("[data-table-counter]").forEach(inp => {
+      inp.addEventListener("change", e => {
+        const id = e.target.dataset.tableCounter;
+        const b = badgeDefs.find(x => x.id === id);
+        const value = Math.max(0, Number(e.target.value || 0));
+        state.counters[b.source] = value;
+        save();
+        renderAll();
+      });
+    });
+  }
+
   function renderCalendar() {
     const wrap = document.getElementById("calendar");
     wrap.innerHTML = "";
 
-    for (let i=0; i<90; i++) {
+    for (let i = 0; i < 90; i++) {
       const d = dateAtOffset(i);
       const k = keyForDate(d);
       const row = state.days[k] || {};
       const future = d > startDate;
+      const isToday = sameDay(d, startDate);
 
       const r = document.createElement("div");
-      r.className = "calendar-row";
+      r.className = `calendar-row ${isToday ? 'is-today' : ''}`;
       r.innerHTML = `
         <div>
-          <div class="day-label">Day ${i+1}</div>
+          <div class="day-label">Day ${i+1} ${isToday ? '🎯' : ''}</div>
           <div class="day-date">${formatShort(d)}</div>
         </div>
         ${["visit","like","comment","wish","article"].map(f =>
           `<div class="cell ${row[f] ? "done":""} ${future ? "future":""}">
-             <input class="check" type="checkbox" data-date="${k}" data-field="${f}" ${row[f] ? "checked":""} ${future ? "disabled":""}>
+             <input class="custom-checkbox" type="checkbox" data-date="${k}" data-field="${f}" ${row[f] ? "checked":""} ${future ? "disabled":""}>
            </div>`
         ).join("")}
       `;
@@ -612,65 +1103,21 @@
     });
   }
 
-  function renderBadges() {
-    const wrap = document.getElementById("badges");
-    wrap.innerHTML = "";
-
-    badgeDefs.forEach(b => {
-      const val = badgeValue(b);
-      const done = badgeDone(b);
-      const div = document.createElement("div");
-      div.className = "badge" + (done ? " completed" : "");
-      const controls = b.type === "manual"
-        ? `<label class="small"><input type="checkbox" class="check" data-manual="${b.id}" ${state.manual[b.id] ? "checked":""}> Done</label>`
-        : `<div class="badge-controls">
-             <input class="num-input" type="number" min="0" value="${val}" data-counter="${b.id}">
-             <span class="small">/ ${b.target}</span>
-           </div>`;
-
-      div.innerHTML = `
-        <div class="badge-top">
-          <div>
-            <div class="badge-name">${done ? "✅ " : ""}${b.name}</div>
-            <div class="badge-req">${b.req}</div>
-          </div>
-          ${controls}
-        </div>
-        ${b.type !== "manual" ? `<div class="progress"><div style="width:${Math.min(100,(val/b.target)*100)}%"></div></div>` : `<div class="small manual" style="margin-top:8px;">Manual badge — tick this when Builder Center shows it as earned.</div>`}
-      `;
-      wrap.appendChild(div);
-    });
-
-    wrap.querySelectorAll("[data-manual]").forEach(cb => {
-      cb.addEventListener("change", e => {
-        state.manual[e.target.dataset.manual] = e.target.checked;
-        save();
-        renderAll();
-      });
-    });
-
-    wrap.querySelectorAll("[data-counter]").forEach(inp => {
-      inp.addEventListener("change", e => {
-        const id = e.target.dataset.counter;
-        const b = badgeDefs.find(x => x.id === id);
-        const value = Math.max(0, Number(e.target.value || 0));
-        state.counters[b.source] = value;
-        save();
-        renderAll();
-      });
-    });
+  function sameDay(a, b) {
+    return a.toDateString() === b.toDateString();
   }
 
   function renderNotes() {
-    const k = keyForDate(keyForDate(startDate));
+    const k = keyForDate(startDate);
     document.getElementById("notes").value = state.notes[k] || "";
   }
 
   function renderAll() {
     renderStats();
+    renderOneTimeTasks();
     renderToday();
+    renderBadgeTable();
     renderCalendar();
-    renderBadges();
     renderNotes();
   }
 
@@ -691,6 +1138,31 @@
     a.download = `aws-builder-tracker-${keyForDate(startDate)}.json`;
     a.click();
     URL.revokeObjectURL(url);
+  });
+
+  document.getElementById("importInput").addEventListener("change", e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try {
+        const imported = JSON.parse(ev.target.result);
+        if (imported && typeof imported === 'object') {
+          state = {
+            days: imported.days || {},
+            manual: imported.manual || {},
+            counters: {...defaultState.counters, ...(imported.counters || {})},
+            notes: imported.notes || {}
+          };
+          save();
+          renderAll();
+          alert("Tracker data imported successfully! 🎉");
+        }
+      } catch (err) {
+        alert("Failed to parse JSON file.");
+      }
+    };
+    reader.readAsText(file);
   });
 
   document.getElementById("resetBtn").addEventListener("click", () => {

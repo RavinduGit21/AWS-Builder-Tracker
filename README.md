@@ -1,101 +1,105 @@
 # ☁️ AWS Builder Rewards Tracker
 
-An intuitive, local-first web dashboard designed for community builders to log daily engagement, maintain activity streaks, track badge progress, and reach AWS reward milestones across a 90-day program.
+An intuitive, modern, local-first web dashboard designed for AWS community builders to log daily engagement, maintain activity streaks, track badge progress, and reach AWS reward milestones across a 90-day program.
 
 ---
 
 ## 🌟 Features
 
-- 📅 **90-Day Interactive Calendar Tracker**
-  - Track daily Builder Center activities: **Visit**, **Like**, **Comment**, **Wish Vote**, and **Article Publishing**.
-  - Interactive grid with visual status cues for completed tasks and past/future dates.
+- 🏆 **All 21 AWS Student Rewards Badges Table**
+  - Structured full matrix table detailing all 21 AWS Builder Center badges.
+  - Displays badge icons, precise requirement descriptions ("What you need to do"), and real-time status indicators (Unlocked ✅ / In Progress / Pending).
+  - Includes interactive checkboxes for manual check-ins and numeric input fields for goal counters.
 
-- 🔥 **Automated Streak Engine**
-  - Instant calculation of consecutive activity streaks for visits, likes, and comments.
-  - Monitors progress toward crucial **7-day**, **30-day**, and **90-day** streak milestones.
+- 📊 **Practical Daily Task List**
+  - **✅ One-Time Tasks**: Quick checklist for foundational onboarding badges (Knowledge Seeker, Hello World, Photo Finisher, Discussion Debut, First Wish, First Article).
+  - **🔥 Everyday Core Habits**: Dedicated daily habit tracker for **Visit Builder Center**, **Like useful content**, and **Leave a meaningful comment** — the 3 daily habits that feed all 7-Day, 30-Day, and 90-Day streak badges.
 
-- 🏆 **21 Badge Progress Management**
-  - Complete list of all 21 AWS Builder Center badges (manual check-ins and numeric goal counters).
-  - Dynamic visual progress bars calculating overall completion percentage.
+- 🎁 **Visual Reward Milestones**
+  - Dynamic milestone cards highlighting current reward achievements and next targets:
+    - 🎯 **7 Badges**: $10 AWS Credits
+    - 🎁 **14 Badges**: +$20 AWS Credits ($30 Total Credits)
+    - 🏆 **21 Badges**: $100 AWS Foundational Certification Voucher
 
-- 🎁 **Reward & Milestone Tracker**
-  - Real-time indicator for unlocked rewards and next targets:
-    - **7 Badges**: $10 / $20 AWS Credits
-    - **14 Badges**: $100 AWS Credit Milestone
-    - **21 Badges**: AWS Certification Voucher Milestone
+- 📅 **90-Day Interactive Calendar Matrix**
+  - Full 90-day daily activity grid tracking Visit, Like, Comment, Wish Vote, and Article publishing tasks.
+  - Visual cues highlighting today's date, past logs, and future days.
 
-- 📝 **Daily Notes & Reference Journal**
+- 📝 **Quick Notes & Reference Journal**
   - Dedicated notes section to stash links to published articles, comment threads, Wish votes, and community interactions.
 
-- 🔒 **Local-First & Privacy-Focused**
-  - Runs entirely in the browser using `localStorage`. No user accounts, registration, backend servers, or tracking cookies required.
-  - Includes **Export Data** functionality to backup your progress state into JSON format.
+- 🔒 **Local-First & Data Portability**
+  - Runs entirely in your browser using `localStorage`. No server, backend, account registration, or tracking.
+  - **📥 Import JSON**: Restore or load tracker progress from a JSON file.
+  - **📤 Export JSON**: Download timestamped JSON backups of your progress state.
 
 ---
 
-## 🎯 Badges & Milestone Matrix
+## 🎯 All 21 AWS Badges & Requirements
 
-| Badge ID | Badge Name | Requirement / Target | Tracking Type |
-| :--- | :--- | :--- | :--- |
-| `b1` | **Knowledge Seeker** | Complete Builder Center activity | Manual Checkbox |
-| `b2` | **Hello, World!** | Complete profile onboarding | Manual Checkbox |
-| `b3` | **Photo Finisher** | Add a profile photo | Manual Checkbox |
-| `b4` | **Discussion Debut** | Create first discussion/post | Manual Checkbox |
-| `b5` | **First Wish** | Create first Wish | Manual Checkbox |
-| `b6` | **First Article** | Publish first article | Manual Checkbox |
-| `b7`–`b9` | **7-Day Streaks** | 7 consecutive days of Visit / Like / Comment | Automated Streak |
-| `b10` | **4-Week Wish Vote Streak** | Vote on Wishes weekly for 4 consecutive weeks | Counter |
-| `b11` | **4-Week Article Streak** | Publish an article weekly for 4 consecutive weeks | Counter |
-| `b12`–`b14`| **30-Day Streaks** | 30 consecutive days of Visit / Like / Comment | Automated Streak |
-| `b15` | **Conversation Starter** | Get replies on 10 of your comments | Counter |
-| `b16` | **Meaningful Contributor** | Get 10 likes on each of 5 comments | Counter |
-| `b17` | **Valued Creator** | Get 10 likes on each of 5 articles | Counter |
-| `b18` | **Idea Influencer** | Get 10 votes on your Wishes | Counter |
-| `b19`–`b21`| **90-Day Streaks** | 90 consecutive days of Visit / Like / Comment | Automated Streak |
+| # | Badge Name | Requirement ("What you need to do") | Tracking Type |
+| :-: | :--- | :--- | :--- |
+| **1** | 🧠 **Knowledge Seeker** | Complete the required learning/exploration activity on Builder Center. | Manual Checkbox |
+| **2** | 🌐 **Hello, World!** | Complete your Builder Center profile/onboarding. | Manual Checkbox |
+| **3** | 📸 **Photo Finisher** | Add a profile photo to your Builder Center profile. | Manual Checkbox |
+| **4** | 💬 **Discussion Debut** | Make your first discussion/post on Builder Center. | Manual Checkbox |
+| **5** | 💡 **First Wish** | Create your first Wish in the AWS Builder Center Wishlist. | Manual Checkbox |
+| **6** | 📝 **First Article** | Publish your first Builder Center article. | Manual Checkbox |
+| **7** | 💻 **7-Day Visit Streak** | Visit Builder Center for 7 consecutive days. | Automated Streak |
+| **8** | 💖 **7-Day Like Streak** | Like content for 7 consecutive days. | Automated Streak |
+| **9** | 💬 **7-Day Comment Streak** | Comment for 7 consecutive days. | Automated Streak |
+| **10** | 📋 **4-Week Wish Vote Streak** | Vote on Wishes once each week for 4 consecutive weeks. | Goal Counter |
+| **11** | ✍️ **4-Week Article Streak** | Publish 1 article every week for 4 consecutive weeks. | Goal Counter |
+| **12** | 💻 **30-Day Visit Streak** | Visit Builder Center for 30 consecutive days. | Automated Streak |
+| **13** | 💖 **30-Day Like Streak** | Like content for 30 consecutive days. | Automated Streak |
+| **14** | 💬 **30-Day Comment Streak** | Comment for 30 consecutive days. | Automated Streak |
+| **15** | 🗣️ **Conversation Starter** | Get a reply on 10 of your comments. | Goal Counter |
+| **16** | ⭐ **Meaningful Contributor** | Get 10 likes on each of 5 different comments. | Goal Counter |
+| **17** | 🏆 **Valued Creator** | Get 10 likes on each of 5 different articles. | Goal Counter |
+| **18** | 💡 **Idea Influencer** | Get 10 votes on your Wishes. | Goal Counter |
+| **19** | 💻 **90-Day Visit Streak** | Visit Builder Center for 90 consecutive days. | Automated Streak |
+| **20** | 💖 **90-Day Like Streak** | Like content for 90 consecutive days. | Automated Streak |
+| **21** | 💬 **90-Day Comment Streak** | Comment for 90 consecutive days. | Automated Streak |
+
+---
+
+## 🎁 Reward Milestones Breakdown
+
+- **7 Badges**: Unlocks **$10 AWS Credits**
+- **14 Badges**: Unlocks an additional **$20 AWS Credits** (*$30 Total Credits earned*)
+- **21 Badges**: Unlocks **$100 AWS Foundational Certification Voucher**
 
 ---
 
 ## 🛠️ Technology Stack
 
-- **Frontend**: Standard HTML5 & Vanilla JavaScript (ES6+)
-- **Styling**: Modern Vanilla CSS3 with CSS Custom Properties, Flexbox, and CSS Grid
-- **Persistence**: Browser `localStorage` (Key: `awsBuilderRewardsTracker_v1`)
-- **Dependencies**: Zero external libraries or frameworks (100% lightweight & offline-capable)
+- **Frontend**: HTML5 & Modern Vanilla JavaScript (ES6+)
+- **Styling**: Vanilla CSS3 with Custom Properties, Glassmorphism, Flexbox, and CSS Grid
+- **Typography**: Google Fonts (*Outfit* & *Inter*)
+- **Storage**: Browser `localStorage` (`awsBuilderRewardsTracker_v1`)
+- **Dependencies**: 100% Zero external dependencies — runs completely offline.
 
 ---
 
 ## 🚀 Getting Started
 
-### Option 1: Direct File Launch
-Simply open `index.html` directly in any modern web browser (Chrome, Firefox, Edge, Safari):
+### Launching directly in browser
+Double click `index.html` or run in terminal:
 
-```bash
-# On Windows PowerShell
+```powershell
 Invoke-Item index.html
 ```
 
-### Option 2: Local HTTP Server
-Serve using any simple static file server, for example:
-
-```bash
-# Using Python
-python -m http.server 8000
-
-# Using Node npx
-npx serve .
-```
-
-Then open `http://localhost:8000` in your web browser.
-
 ---
 
-## 💾 Data Backup & Reset
+## 💾 Data Backup & Restore
 
-- **Export Data**: Click the **Export Data** button in the header to download a timestamped JSON backup file containing your task records, custom counters, manual check-ins, and notes.
-- **Reset All**: Use the **Reset All** button to clear browser storage and start fresh.
+- **Export Data**: Click **Export Data** to save your progress state to a JSON backup file.
+- **Import Data**: Click **Import JSON** to restore or load tracker progress from a JSON file.
+- **Reset All**: Use **Reset** to restore default tracker state.
 
 ---
 
 ## 📄 License
 
-Distributed under the MIT License. Feel free to customize and modify for your personal AWS tracking goals!
+Distributed under the MIT License. Feel free to modify and share!
