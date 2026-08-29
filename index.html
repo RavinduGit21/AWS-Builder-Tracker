@@ -1085,8 +1085,8 @@
           <div class="day-date">${formatShort(d)}</div>
         </div>
         ${["visit","like","comment","wish","article"].map(f =>
-          `<div class="cell ${row[f] ? "done":""} ${future ? "future":""}">
-             <input class="custom-checkbox" type="checkbox" data-date="${k}" data-field="${f}" ${row[f] ? "checked":""} ${future ? "disabled":""}>
+          `<div class="cell ${row[f] ? "done":""}">
+             <input class="custom-checkbox" type="checkbox" data-date="${k}" data-field="${f}" ${row[f] ? "checked":""}>
            </div>`
         ).join("")}
       `;
